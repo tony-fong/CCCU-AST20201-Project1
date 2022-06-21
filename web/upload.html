@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body>
+        <form>
+            <p>product name<input type="text" id="product_name"><a id="name_empty"></a></p>
+            <p>product type<select id="product_type">
+                                <option value="none" id="all">please select</option>
+                                <option value="food" id="food">food</option>
+                                <option value="entertainment" id="entertainment">entertainment</option>
+                                <option value="clothes" id="clothes">clothes</option>
+                                <option value="electronic" id="electronic">electronic</option>
+                            </select><a id="type_empty"></a></p>
+            <p>product price<input type="text" id="product_price"><a id="price_empty"></a></p>
+            <p>product info<textarea id="product_info"></textarea><a id="info_empty"></a></p>    
+            <input type="button" value="next" id="sub">
+            <a id="result"></a>
+        </form>
+    </body>
+    <script>
+
+        $("#sub").click(function(event){
+
+            var name = $("#product_name").val();
+            var type = $("#product_type").val();
+            var price = $("#product_price").val();
+            var info = $("#product_info").val();
+            var flag = true; 
+            if(name === ""){
+                //console.log("name empty");
+                $("#name_empty").html("can not be empty");
+                flag = false;
+            }else{
+                $("#name_empty").html("");
+            }
+            if(type == "none"){
+                //console.log("type empty");
+                $("#type_empty").html("can not be empty");
+                flag = false;
+            }else{
+                console.log(type);
+                $("#type_empty").html("");
+            }
+            if(price === "" || price > 99999){
+                //console.log(typeof(price));
+                $("#price_empty").html("invit input");
+                flag = false;
+            }else{
+                $("#price_empty").html("");
+            }
+            if(info === ""){
+                //console.log("info empty");
+                $("#info_empty").html("can not be empty");
+                flag = false;
+            }else{
+                $("#info_empty").html("");;
+            }
+            console.log(flag);
+            if(flag){
+                $.post("upload.jsp",{
+                    name:name,
+                    type:type,
+                    price:price,
+                    info:info
+                }).done(function( data ) {
+                    $("#result").html(data);
+                });
+
+            }else{
+                return;
+            }
+    });
+    </script>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>register</title>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body>
+        <form id="registerForm">
+            <p>
+            <input type="radio" id="buyer" value="buyer">buyer
+            <input type="radio" id="seller" value="seller">seller
+            <a id="role"></a>
+            </p>
+            <p>username:<input type ="text" id="username"><a id="user_empty"></a></p>
+            <p>password:<input type ="password" id="password"><a id="pw_not_match"></a></p>
+            <p>Confirm password:<input type ="password" id="repassword"></p>
+            <input type="submit" >
+            <a id="result"></a>
+	</form>
+        <a id="warning"></a>
+    </body>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#registerForm").submit(function(event){
+                event.preventDefault();
+                var username = $("#username").val();
+                var password = $("#password").val();
+                var repassword = $("#repassword").val();
+                var role;
+                var flag = true;
+                if(username == ""){
+                    $("#user_empty").html("username can nnot be empty");
+                    flag = false
+                }
+                if(password != repassword){
+                    $("#pw_not_match").html("password not match");
+                    flag = false;
+                }
+
+                if($("#buyer").is(":checked")){
+                    $("#role").html("buyer");
+                    role = "buyer";
+                    
+                }else if($("#seller").is(":checked")){
+                    $("#role").html("seller");
+                    role = "seller";
+                }else{
+                    $("#role").html("please select role");
+                    flag = false;
+                }
+                if(flag){
+                    $.post("register.jsp",{
+                        username:username,
+                        pw:password,
+                        role:role
+                    }).done(function(data){
+                        $("#result").html(data);
+                    });
+                }
+            });
+        });
+    </script>
+</html>

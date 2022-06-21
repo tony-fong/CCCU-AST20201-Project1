@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body>
+        <form action="upImage.jsp" method="post" onsubmit="return check()" enctype="multipart/form-data">
+<input id="product_img" type="file" name="file" size="50" accept=".jpg,.jpeg" />
+<a class="worring" id="imagesize"></a>
+<a class="warning" id="filesize"></a>
+<br/>
+<br/>
+<input type="submit" value="Upload File"  />
+</form>
+    </body>
+    <script>
+    var _URL = window.URL || window.webkitURL;
+    var img;
+    var flag = false;
+    $("#product_img").change(function (e) {
+        var file = this.files[0];
+        var maxsize = 50000 ;
+        if (file) {
+            img = new Image();
+            var imageURl = _URL.createObjectURL(file);
+            img.onload = function () {
+                console.log(maxsize);
+                console.log("width" + this.width);
+                console.log("hight" + this.height);
+                console.log("size" + file.size);
+                if(this.width > 600 || this.height > 400){
+                    $("#imagesize").html("image size must between 600 * 400");
+                    flag =false;
+                }else{
+                     $("#imagesize").html("");
+                    flag = true;
+                }
+                if(file.size > maxsize){
+                    $("#filesize").html("file size must less then 50kB");
+                    flag = false;
+                }else{
+                    $("#filesize").html("");
+                    flag = true;
+                }
+            };
+            img.src = imageURl;
+        }
+    });
+    function check(){
+        return flag;
+    }
+    </script>
+</html>

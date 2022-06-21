@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+
+    <body>
+        <div id="userInfo">
+        </div>
+        <div class="pop_up">
+            <div id="changePW">
+                <a class="error" id="password_not_match">
+                <a id="result"></a>
+                <form>
+                    <p>old password: <input type="text" id="oldpw"></p>
+                    <p>new password: <input type="text" id="newpw"></p>
+                    <p>reinput password<input type="text" id="renewpw"></p>
+                    <input type="button" value="submit" id="sub">
+                </form>
+            </div>
+        </div>
+        <div id="Record">
+        </div>
+
+    </body>
+            <script>
+            function getinfo(callback1,callback2){
+                $.post("getuserinfo.jsp",{
+                }).done(function(data){
+                    $("#userInfo").html(data);
+                    callback1();
+                    callback2();
+                });
+                
+            }
+            function changePW(){
+                $("#changepw").click(function(){
+                    $(".pop_up").show();
+                    $("#Record").hide();
+                });
+                $(".pop_up").click(function(){
+                    $("#changePW").show();
+                    if($(event.target).closest('#changePW').length){
+                    }else{
+                        $(".pop_up").hide(); 
+                    }
+                });
+            }
+            function loadrecord(){
+                $("#checkRecord").click(function(){
+                    $("#Record").show();
+                    $.post("checkRecord.jsp",{
+                    }).done(function(record){
+                        $("#Record").html(record);
+                        
+                    });
+                });
+                $("#Record").click(function(){
+                    $("#changePW").show();
+                    if($(event.target).closest('#changePW').length){
+                    }else{
+                        $(".pop_up").hide(); 
+                    }
+                });
+            }
+            $("#sub").click(function(){
+                var oldpw = $("#oldpw").val();
+                var newpw = $("#newpw").val();
+                var renewpw = $("#renewpw").val();
+                if(newpw != renewpw){
+                    $("#password_not_match").html("the new password must be same");
+                }else{
+                    $.post("changePW.jsp",{
+                        oldpw:oldpw,
+                        newpw:newpw
+                    }).done(function(result){
+                        $("#result").html(result);
+                    });
+                }
+            });
+            $(document).ready(function(){getinfo(changePW,loadrecord);});
+        </script>
+</html>

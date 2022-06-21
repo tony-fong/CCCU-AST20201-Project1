@@ -1,0 +1,18 @@
+try{
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        }catch(Exception e){
+            out.println("create class fall:  " + e);
+        }
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        ResultSetMetaData meta = null;
+
+        try{
+            conn = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/ast20201?user=root&password=root&useSSL=false&serverTimezone=UTC"
+            );
+            stmt = conn.createStatement();
+        }catch(SQLException e){
+            out.println("connection error: " + e);
+        }

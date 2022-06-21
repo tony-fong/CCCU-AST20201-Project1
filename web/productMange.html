@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script>
+            function loadproduct(callback){
+                $.post("product.jsp",{
+                    mange:"mange"
+                }).done(function(product){
+                    $("#product").html(product);
+                    callback();
+                });
+            }
+            function change(){
+                var product_id;
+                var button;
+                var oldid;
+                var newid;
+            $(".contact").dblclick(function(){
+                product_id =  $(this).closest('div').attr('id');
+                button = "#" + product_id + ".submit";
+                oldid = this.id;
+                newid = "change" + this.id;
+                console.log(oldid);
+                if(oldid == "productType"){
+                    $(this).replaceWith("<select id='" + newid + "'><option value='none' id='all'>please select</option><option value='food' id='food'>food</option><option value='entertainment' id='ntertainment'>entertainment</option><option value='clothes' id='clothes'>clothes</option><option value='electronic' id='electronic'>electronic</option></select>");
+                }else if(oldid == "info"){
+                   $(this).replaceWith("<textarea id='" + newid + "'></textarea>");
+                }else{
+                    $(this).replaceWith("<input type='text' id='" + newid + "'>");
+                }
+                $(button).show();
+            });
+             $(".submit").click(function(){
+                 console.log(product_id);
+                 var name = null;
+                 var price = null;
+                 var price = null;
+                 var info = null;
+                 var type = null;
+                 if($("#changeproductName").val() != null){
+                    name = $("#changeproductName").val();
+                 }
+                 if($("#changeproductPrice").val() != null){
+                      price = $("#changeproductPrice").val();
+                 }
+                 if($("#changeinfo").val() != null){
+                      info = $("#changeinfo").val();
+                 }
+                 if($("#changeproductType").val() != "none"){
+                      type = $("#changeproductType").val();
+                 }
+                 $.post("changeProduct.jsp",{
+                        product_id:product_id,
+                        product_type:type,
+                        product_name:name,
+                        product_price:price,
+                        product_info:info
+                 }).done(function(){
+                      location.reload();
+                 });
+             });
+             $(".delete").click(function(){
+                product_id = this.id;
+                 console.log(product_id);
+                $.post("deleteProduct.jsp",{
+                    product_id:product_id
+                }).done(function(){
+                    location.reload();
+                });
+             });
+        }
+       
+        $(document).ready(function(){loadproduct(change)});
+        </script>    
+    </head>
+    <body>
+        <h2>double click to change to contact</h2>
+        <h4>only once each time</h4>
+        <div id="product">
+        </div>
+    </body>
+</html>

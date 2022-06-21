@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>product list</title>
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+
+    <body>
+        <div id="searchmeun">
+            <select id="type">
+                <option value="all" id="all">please select</option>
+                <option value="food" id="food">food</option>
+                <option value="entertainment" id="entertainment">entertainment</option>
+                <option value="clothes" id="clothes">clothes</option>
+                <option value="electronic" id="electronic">electronic</option>
+            </select>
+            <input type="text" id="seacrh">
+            <input type="button" id="submit" value="search">
+        </div>
+        
+        <div id="list">
+        </div>
+        
+        <div class="pop_up">
+            <div id="contact"></div>
+        </div>
+    </body>
+    <script>
+        
+    function loadProduct(callback){
+        var type = $("#type").val();
+        var search = $("#seacrh").val();
+        $.post("product.jsp",{
+            type:type,
+            search:search
+        }).done(function(data){
+            var product = $(data);
+            $("#list").html(product);
+            callback();
+        });
+    }
+
+    function showInfo(){
+        $(".product").click(function(){
+            var product_id = this.id;
+            $(".pop_up").show();
+            $.post("show.jsp",{
+                id:product_id
+            }).done(function(data){
+                console.log(data);
+               $("#contact").html(data); 
+            });
+        });
+       $(".pop_up").click(function(event){
+           if($(event.target).closest('#contact').length){
+         }else{
+           $(".pop_up").hide(); 
+         }
+        });
+    }
+    $(document).ready(function(){
+        loadProduct(showInfo);
+    });
+    $("#type").change(loadProduct(showInfo));
+    
+    $("#submit").click(function(){
+        loadProduct(showInfo);
+    });
+</script>
+</html>
